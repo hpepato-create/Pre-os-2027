@@ -1,5 +1,5 @@
 // Cache para uso offline. Ao atualizar preços, troque a versão para forçar a renovação.
-const CACHE = 'lista-precos-2027-v1';
+const CACHE = 'lista-precos-2027-v2';
 const ARQUIVOS = [
   './',
   './index.html',

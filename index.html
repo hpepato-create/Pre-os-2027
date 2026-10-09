@@ -204,18 +204,31 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
 .big .val{font-size:30px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;line-height:1}
 .big .val small{font-size:15px;font-weight:700;opacity:.75;margin-right:4px}
 .big .base{margin-top:12px;padding-top:9px;border-top:1px solid rgba(255,255,255,.16);font-size:12.5px;color:#CFDCEC}
-.calc{display:flex;align-items:center;gap:12px;margin-top:12px;padding:10px 12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
-.calc .ql{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.calc{margin-top:12px;padding:12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+.calc-in{display:flex;flex-wrap:wrap;gap:12px 14px}
+.calc .ql{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.pct{display:flex;align-items:center;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--surface);padding-right:12px}
+.pct:focus-within{border-color:var(--green)}
+.pct input{width:68px;height:40px;border:0;border-radius:10px;padding:0 4px 0 10px;text-align:right;font:inherit;font-size:17px;font-weight:700;
+  background:transparent;color:var(--ink);-webkit-appearance:none;appearance:none}
+.pct input:focus,.pct input:focus-visible{outline:none}
+.pct input::placeholder{color:var(--ink-3);font-weight:600}
+.pct span{font-size:16px;font-weight:700;color:var(--ink-3)}
+.calc-out{display:flex;flex-direction:column;gap:7px;margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}
+.co-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px;color:var(--ink-2)}
+.co-row b{font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap;text-align:right}
+.co-row em{font-style:normal;color:var(--ink-3)}
+.co-row .eco{color:var(--tech-ink)}
+.co-row.tot{margin-top:2px}
+.co-row.tot > span{font-weight:700;color:var(--ink)}
 .step{display:flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
 .step:focus-within{border-color:var(--green)}
 .step input:focus,.step input:focus-visible{outline:none}
 .step button{width:40px;height:40px;font-size:22px;font-weight:600;line-height:1;color:var(--tab-on)}
 .step input{width:62px;height:40px;border:0;border-left:1px solid var(--line);border-right:1px solid var(--line);border-radius:0;
   text-align:center;font:inherit;font-size:17px;font-weight:700;background:transparent;color:var(--ink);-webkit-appearance:none;appearance:none}
-.total{flex:1;min-width:0;text-align:right}
-.total>small{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
-.total b{font-size:19px;font-weight:800;white-space:nowrap}
-.total b small{font-size:12px;font-weight:700;color:var(--ink-3);margin-right:3px}
+.co-row.tot b{font-size:20px;font-weight:800}
+.co-row.tot b small{font-size:12px;font-weight:700;color:var(--ink-3);margin-right:3px}
 .share{width:100%;height:46px;margin-top:12px;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;
   display:flex;align-items:center;justify-content:center;gap:8px}
 .share svg{width:19px;height:19px}
@@ -239,6 +252,7 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 @media (max-width:360px){
+  .sched-h span{display:none}
   .eyebrow{font-size:10px;letter-spacing:.1em}
   .seg .d{display:none}
   .seg button{font-size:13px}
@@ -332,15 +346,29 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
       <div class="base num" id="shBase"></div>
     </div>
     <div class="calc">
-      <div>
-        <div class="ql">Qtd. sacos</div>
-        <div class="step">
-          <button type="button" id="qMinus" aria-label="Diminuir">−</button>
-          <input id="qty" type="text" inputmode="numeric" pattern="[0-9]*" value="1" aria-label="Quantidade de sacos">
-          <button type="button" id="qPlus" aria-label="Aumentar">+</button>
+      <div class="calc-in">
+        <div>
+          <label class="ql" for="qty">Qtd. sacos</label>
+          <div class="step">
+            <button type="button" id="qMinus" aria-label="Diminuir">−</button>
+            <input id="qty" type="text" inputmode="numeric" pattern="[0-9]*" value="1" autocomplete="off">
+            <button type="button" id="qPlus" aria-label="Aumentar">+</button>
+          </div>
+        </div>
+        <div>
+          <label class="ql" for="desc">Desconto</label>
+          <div class="pct">
+            <input id="desc" type="text" inputmode="decimal" placeholder="0" autocomplete="off" aria-describedby="descUn">
+            <span id="descUn">%</span>
+          </div>
         </div>
       </div>
-      <div class="total"><small>Total</small><b class="num" id="shTotal"></b></div>
+      <div class="calc-out">
+        <div class="co-row"><span>Preço por saco</span><b class="num" id="shList"></b></div>
+        <div class="co-row" id="rowUnit" hidden><span id="shUnitLbl"></span><b class="num" id="shUnit"></b></div>
+        <div class="co-row" id="rowEco" hidden><span>Desconto total</span><b class="num eco" id="shEco"></b></div>
+        <div class="co-row tot"><span>Total <em id="shQtyLbl"></em></span><b class="num" id="shTotal"></b></div>
+      </div>
     </div>
     <button class="share" id="shShare" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>
@@ -434,6 +462,7 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
   var $ = function (id) { return document.getElementById(id); };
   var nf = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var brl = function (v) { return nf.format(v); };
+  var nfPct = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 });
   var esc = function (s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -455,7 +484,7 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
 
   function cultura(key) { return D.cultures.find(function (c) { return c.key === key; }); }
 
-  var st = { cult: load('cultura'), due: proximo, q: '', view: 'precos', open: null, qty: 1 };
+  var st = { cult: load('cultura'), due: proximo, q: '', view: 'precos', open: null, qty: 1, desc: 0 };
   if (!cultura(st.cult)) st.cult = D.cultures[0].key;
 
   function dueStatus(i) {
@@ -574,11 +603,29 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
     var c = cultura(st.open.c);
     return { c: c, p: c.products[st.open.p] };
   }
-  function total() {
-    var x = atual();
-    return Math.round(x.p.prices[st.due] * st.qty * 100) / 100;
+  // valores em centavos para evitar erro de arredondamento
+  function calc() {
+    var preco = atual().p.prices[st.due];
+    var cent = Math.round(preco * 100);
+    var unitCent = Math.round(cent * (100 - st.desc) / 100 + 1e-6);
+    return {
+      preco: preco,
+      unit: unitCent / 100,
+      bruto: cent * st.qty / 100,
+      total: unitCent * st.qty / 100,
+      eco: (cent - unitCent) * st.qty / 100
+    };
   }
-  function renderTotal() { $('shTotal').innerHTML = '<small>R$</small>' + brl(total()); }
+  function renderTotal() {
+    var r = calc(), comDesc = st.desc > 0;
+    $('shList').textContent = 'R$ ' + brl(r.preco);
+    $('rowUnit').hidden = $('rowEco').hidden = !comDesc;
+    $('shUnitLbl').textContent = 'Com ' + nfPct.format(st.desc) + '% de desconto';
+    $('shUnit').textContent = 'R$ ' + brl(r.unit);
+    $('shEco').textContent = '− R$ ' + brl(r.eco);
+    $('shQtyLbl').textContent = '(' + st.qty + (st.qty === 1 ? ' saco)' : ' sacos)');
+    $('shTotal').innerHTML = '<small>R$</small>' + brl(r.total);
+  }
 
   function renderSheet() {
     var x = atual(), p = x.p, d = dues[st.due];
@@ -591,6 +638,7 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
     $('shPrice').innerHTML = '<small>R$</small>' + brl(p.prices[st.due]);
     $('shBase').textContent = 'Preço por saco' + (st.due === 0 ? '' : ' · base ' + dues[0].s + ': R$ ' + brl(p.prices[0]));
     $('qty').value = st.qty;
+    $('desc').value = st.desc ? nfPct.format(st.desc) : '';
     renderTotal();
     $('sched').innerHTML = dues.map(function (d) {
       var tags = '';
@@ -619,7 +667,7 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
   function closeSheet() {
     if (!st.open) return;
     st.open = null;
-    $('qty').blur();
+    $('qty').blur(); $('desc').blur();
     sheet.style.transform = '';
     sheet.classList.remove('open');
     sheet.setAttribute('aria-hidden', 'true');
@@ -643,13 +691,14 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
   }
 
   function shareText() {
-    var x = atual(), d = dues[st.due], preco = x.p.prices[st.due];
+    var x = atual(), d = dues[st.due], r = calc();
     var linhas = [
       x.p.code + ' — ' + x.p.pack,
       x.c.label + ' · ' + D.campaign,
-      'Vencimento ' + d.s + ': R$ ' + brl(preco) + ' por saco'
+      'Vencimento ' + d.s + ': R$ ' + brl(r.preco) + ' por saco'
     ];
-    if (st.qty > 1) linhas.push(st.qty + ' sacos: R$ ' + brl(total()));
+    if (st.desc > 0) linhas.push('Com ' + nfPct.format(st.desc) + '% de desconto: R$ ' + brl(r.unit) + ' por saco');
+    if (st.qty > 1) linhas.push(st.qty + ' sacos: R$ ' + brl(r.total));
     linhas.push(D.subtitle);
     return linhas.join('\n');
   }
@@ -703,6 +752,20 @@ h1{margin:2px 0 0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-heig
   });
   $('qty').addEventListener('focus', function () { this.select(); });
   $('qty').addEventListener('blur', function () { this.value = st.qty; });
+  $('desc').addEventListener('input', function () {
+    // aceita vírgula ou ponto, até 2 casas decimais, de 0 a 100
+    var v = this.value.replace(/\./g, ',').replace(/[^\d,]/g, '');
+    var i = v.indexOf(',');
+    if (i >= 0) v = v.slice(0, i + 1) + v.slice(i + 1).replace(/,/g, '').slice(0, 2);
+    var n = parseFloat(v.replace(',', '.'));
+    if (n > 100) { v = '100'; n = 100; }
+    if (this.value !== v) this.value = v;
+    st.desc = isNaN(n) ? 0 : n;
+    renderTotal();
+  });
+  $('desc').addEventListener('focus', function () { this.select(); });
+  $('desc').addEventListener('blur', function () { this.value = st.desc ? nfPct.format(st.desc) : ''; });
+  $('desc').addEventListener('keydown', function (e) { if (e.key === 'Enter') this.blur(); });
   function copiar(txt) {
     function manual() {
       var ta = document.createElement('textarea');
